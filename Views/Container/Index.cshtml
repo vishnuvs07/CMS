@@ -1,0 +1,87 @@
+﻿@model List<CMS.Data.Container>
+
+<style>
+    .-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100px;
+        height: 30px;
+        text-align: center;
+        border-radius: 8px;
+    }
+
+    .-btn:hover {
+        opacity: .8;
+    }
+
+    .-bg {
+        background: #1c449b;
+    }
+
+    .-txt {
+        color: #fff;
+    }
+</style>
+
+<h2>Container List</h2>
+
+<div style="display:flex; margin-top:20px;">
+    <div>
+        <form asp-action="Index" method="get">
+            <div style="display:flex">
+                <div>
+                    <label for="filterDropdown">Filter by status:</label>                    
+                </div>
+                <div style="margin-left:10px;">
+                    <select id="Status" name="Status" class="form-control" style="width:200px;">
+                        <option value="All">All</option>
+                        <option value="In Transit">In Transit</option>
+                        <option value="At Dock">At Dock</option>
+                        <option value="Delivered">Delivered</option>
+                    </select>
+                    <button type="submit" class="-btn -bg -txt" style="margin-top:10px;">Apply Filter</button>
+                </div>              
+            </div>          
+        </form>
+    </div>
+    <div style="margin-left: auto;">
+        @Html.ActionLink("Add New", "Create", "Container", null,  new { @class = "-btn -bg -txt" })
+    </div>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Container Number</th>
+            <th>Shipment Date</th>
+            <th>Origin Port</th>
+            <th>Destination Port</th>
+            <th>Status</th>
+            <th>Documentation</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var container in Model)
+        {
+            <tr>
+                <td>@container.ContainerNumber</td>
+                <td>@container.ShipmentDate.ToShortDateString()</td>
+                <td>@container.OriginPort</td>
+                <td>@container.DestinatiionPort</td>
+                <td>@container.Status</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(container.DocumentFilePath))
+                    {
+                        <a href="@container.DocumentFilePath" download>Download Documentation</a>
+                    }
+                    else
+                    {
+                        <span>No documentation available</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
